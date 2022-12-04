@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rule-engine-deploy
+spec:
+  replicas: 1
+  revisionHistoryLimit: 1
+  selector:
+    matchLabels:
+      app: rule-engine
+  template:
+    metadata:
+      labels:
+        app: rule-engine
+    spec:
+      containers:
+      - name: rule-engine-deploy
+        image: public.ecr.aws/w8w9x8q7/rule-engine:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 9199     
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: "rule-engine-service"
+spec:
+  ports:
+    - port: 8445
+      targetPort: 9199
+      protocol: TCP
+  type: LoadBalancer
+  selector:
+    app: rule-engine
