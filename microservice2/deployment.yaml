@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ingestion-deploy
+spec:
+  replicas: 1
+  revisionHistoryLimit: 1
+  selector:
+    matchLabels:
+      app: ingestion
+  template:
+    metadata:
+      labels:
+        app: ingestion
+    spec:
+      containers:
+      - name: ingestion-deploy
+        image: public.ecr.aws/w8w9x8q7/ingestion-service:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8002
+           
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: "ingestion-service"
+spec:
+  ports:
+    - port: 8002
+      targetPort: 8002
+      protocol: TCP
+  type: LoadBalancer
+  selector:
+    app: ingestion

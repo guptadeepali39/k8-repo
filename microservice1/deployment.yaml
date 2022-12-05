@@ -18,7 +18,14 @@ spec:
         image: public.ecr.aws/w8w9x8q7/rule-engine:latest
         imagePullPolicy: Always
         ports:
-        - containerPort: 9199     
+        - containerPort: 8081
+        volumeMounts:
+          - mountPath: /home/application/RuleEngineConfig
+            name: rule-config
+      volumes:
+      - name: rule-config
+        configMap:
+          name: rule-config    
 ---
 apiVersion: v1
 kind: Service
@@ -26,8 +33,8 @@ metadata:
   name: "rule-engine-service"
 spec:
   ports:
-    - port: 8445
-      targetPort: 9199
+    - port: 8081
+      targetPort: 8081
       protocol: TCP
   type: LoadBalancer
   selector:
