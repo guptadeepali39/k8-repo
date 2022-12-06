@@ -20,7 +20,7 @@ spec:
         ports:
         - containerPort: 8081
         volumeMounts:
-          - mountPath: /home/application/RuleEngineConfig
+          - mountPath: /home/ec2-user/RuleFiles
             name: rule-config
       volumes:
       - name: rule-config
